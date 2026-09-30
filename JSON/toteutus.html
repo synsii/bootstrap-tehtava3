@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Digitekniikat</title>
+
+    <!-- BOOTSTRAP -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- OMA CSS -->
+    <link rel="stylesheet" href="json-style.css">
+</head>
+
+<body>
+
+    <!-- NAVIGAATIO -->
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+        <div class="container">
+
+            <a class="navbar-brand" href="index.html">JSON-tehtävä</a>
+
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainNav"
+                aria-controls="mainNav"
+                aria-expanded="false"
+                aria-label="Avaa navigaatio"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Etusivu</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="toteutus.html">Toteutus</a>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- SISÄLTÖ -->
+    <main class="container py-5">
+
+        <h1>Digitekniikat</h1>
+
+        <div id="vastaus"></div>
+
+    </main>
+
+    <!-- BOOTSTRAP JAVASCRIPTI -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+<!-- TOTEUTUKSEN JSON DATAN HAKEMINEN -->
+<script>
+    fetch("toteutus.JSON")
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (responseJson) {
+            kerro(responseJson);
+        })
+        .catch(function (error) {
+            document.getElementById("vastaus").innerHTML =
+                "<p>Tietoa ei pystytä hakemaan</p>";
+        });
+
+    function kerro(obj) {
+
+        let tiedot = "<h1>" + obj.nimi + "</h1><br>";
+
+        tiedot += "Osallistujia: " + obj.osallistujat + "<br>";
+        tiedot += "Alkamisaika: " + obj.alkamisaika + "<br>";
+        tiedot += "Päättymisaika: " + obj.paattymisaika + "<br>";
+        tiedot += "Kesto: " + obj.kesto + "<br>";
+
+        tiedot += "<h3>Osallistujat</h3>";
+
+        for (var i = 0; i < obj.henkilot.length; i++) {
+            tiedot += obj.henkilot[i] + "<br>";
+        }
+
+        tiedot += "<p><img src=" + obj.kuva + "></p>";
+
+        document.getElementById("vastaus").innerHTML = tiedot;
+    }
+</script>
+
+</body>
+</html>
