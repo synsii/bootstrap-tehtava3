@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>JSON-tehtävä</title>
+    <title>Helsingin sää</title>
 
     <!-- BOOTSTRAP -->
     <link
@@ -39,23 +39,23 @@
             <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav ms-auto">
 
-    <li class="nav-item">
-        <a class="nav-link active" href="index.html">Etusivu</a>
-    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Etusivu</a>
+                    </li>
 
-    <li class="nav-item">
-        <a class="nav-link" href="toteutus.html">Toteutus</a>
-    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="toteutus.html">Toteutus</a>
+                    </li>
 
-    <li class="nav-item">
-    <a class="nav-link" href="poke.html">Pokemon</a>
-    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="poke.html">Pokemon</a>
+                    </li>
 
-    <li class="nav-item">
-    <a class="nav-link" href="saa.html">Sää</a>
-    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="saa.html">Sää</a>
+                    </li>
 
-</ul>
+                </ul>
             </div>
 
         </div>
@@ -63,6 +63,8 @@
 
     <!-- SISÄLTÖ -->
     <main class="container py-5">
+
+        <h1>Sää Helsingissä</h1>
 
         <div id="vastaus"></div>
 
@@ -73,40 +75,29 @@
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
     </script>
 
-<!-- JSON DATAN HAKEMINEN -->
+    <!-- SÄÄDATAN HAKEMINEN -->
 <script>
-    fetch("tietue.JSON")
+    fetch("https://api.openweathermap.org/data/2.5/weather?id=658225&appid=665ecd56dfc08dbb50feb8b8f5034e28&lang=fi&units=metric")
         .then(function (response) {
             return response.json();
         })
-        .then(function (responseJson) {
-            kerro(responseJson);
-        })
-        .catch(function (error) {
-            document.getElementById("vastaus").innerHTML =
-                "<p>Tietoa ei pystytä hakemaan</p>";
+        .then(function (data) {
+            kerro(data);
         });
-function kerro(obj) {
 
-    let tiedot = "<h1>" + obj.otsikko + "</h1><br>"
-        + obj.kuvaus + "<br><hr>";
+    function kerro(data) {
 
-    tiedot += "<p><img src=" + obj.kuva + "></p>";
+    let tiedot = "<h2>" + data.weather[0].description + "</h2>";
+    tiedot += "<p>Lämpötila: " + data.main.temp + " °C</p>";
+    tiedot += "<p>Tuuli: " + data.wind.speed + " m/s</p>";
 
-    tiedot += "<h3>Opintojakso</h3>"
-        + "Nimi: " + obj.opintojakso.nimi + "<br>"
-        + "Tunnus: " + obj.opintojakso.tunnus + "<br>"
-        + "Opintopisteet: " + obj.opintojakso.opintopisteet + "<br>";
-    tiedot += "<p><h3>Aiheet</h3>";
+    let kuva = "https://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png";
 
-    for (var i = 0; i < obj.tekniikat.length; i++) {
+    tiedot += "<p><img src=" + kuva + "></p>";
 
-        tiedot += "<b>Aihe: " + obj.tekniikat[i].aihe + "</b>";
-        tiedot += " <a href=" + obj.tekniikat[i].linkki + ">"
-            + obj.tekniikat[i].linkki + "</a><br>";
-    }
+    let aika = new Date();
 
-    tiedot += "</p>";
+    tiedot += "<p>Sivu ladattu: " + aika + "</p>";
 
     document.getElementById("vastaus").innerHTML = tiedot;
 }
